@@ -48,7 +48,26 @@
 	
 	<!-- Web层基于注解的扫描路径 -->
 	<context:component-scan base-package="mblog.web.controller" />
-	
+
+	<!--避免IE执行AJAX时，返回JSON出现下载文件 ///////////未生效待解决2016年5月5日14:02:25-->
+	<!--<bean id="mappingJacksonHttpMessageConverter"
+		  class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>-->
+	<!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
+	<!--<bean
+			class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="mappingJacksonHttpMessageConverter" /> &lt;!&ndash; JSON转换器 &ndash;&gt;
+			</list>
+		</property>
+	</bean>-->
+
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
 		<property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml" />
 		<property name="layoutUrl" value="default/layout/columns_right_sidebar.vm" />

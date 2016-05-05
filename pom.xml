@@ -10,6 +10,7 @@
 		<module>mblog-core</module>
 		<module>mblog-web</module>
 		<module>mblog-plugin-example</module>
+		<module>mblog-wechat</module>
 	</modules>
 
 	<properties>
