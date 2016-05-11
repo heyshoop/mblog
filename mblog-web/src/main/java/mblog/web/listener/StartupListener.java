@@ -91,10 +91,6 @@ public class StartupListener implements InitializingBean, ServletContextAware {
 					Printer.error("配置信息加载失败,我猜,可能是没有导入初始化数据(db_init.sql)导致的");
 					System.exit(1);
             	} else {
-
-					if (configs.size() < 13) {
-						Printer.warn("嗯哼,系统检测到'系统配置'有更新,而你好像错过了什么, 赶紧去后台'系统配置'里检查下吧!");
-					}
             		configs.forEach(conf -> {
 //						servletContext.setAttribute(conf.getKey(), conf.getValue());
 						configMap.put(conf.getKey(), conf.getValue());

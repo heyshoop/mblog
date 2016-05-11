@@ -2,10 +2,11 @@ package mblog.wechat.utill;
 
 import java.util.Date;
 /**
- * 封装最终的xml格式结果
- * @author pamchen-1
- *
+ * @Author 阁楼麻雀
+ * @Date 2016-5-11 15:34
+ * @Desc 封装最终的xml格式结果
  */
+
 public class FormatXmlProcess {
 	/**
 	 * 封装文字类的返回消息
