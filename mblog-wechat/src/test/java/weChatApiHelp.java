@@ -21,13 +21,13 @@ public class weChatApiHelp {
         MsgPushService msgPushService = new MsgPushService();
         try {
             accessToken = msgPushService.getAccessToken(appid,secret);
-            File file = new File("D:/data/thumbs/2016/0509/saber.jpg");
+            File file = new File("D:\\data\\thumbs\\2016\\0509\\saber.jpg");
             response = msgPushService.getMediaId(accessToken,file,"image");
             //response = msgPushService.seedTextMessage(accessToken,url,"群发接口1");
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println("accessToken:"+accessToken);
+        //System.out.println("response:"+response);
         //System.out.println("response:"+response);
     }
 }

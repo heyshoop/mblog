@@ -3,20 +3,28 @@ package mblog.wechat.service;
 import mblog.wechat.utill.Constants;
 import mblog.wechat.utill.HttpClientUtil;
 import mblog.wechat.utill.JsonUtils;
+import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 
 import java.io.IOException;
+
 
 
 /**
@@ -95,13 +103,12 @@ public class MsgPushService {
             String url = MessageFormat.format(UploadTempUrl,accessToken,type);
             httpClient = HttpClientUtil.getHttpClient();
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();//builder替代过时的MultipartEntity
-            builder.addBinaryBody("media",file);
-            HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(builder.build());
-            httpResponse = httpClient.execute(httpPost);
-            HttpEntity entity = httpResponse.getEntity();
-            response = EntityUtils.toString(entity,"UTF-8");
-            System.out.println(response);
+            builder.setMode(HttpMultipartMode.RFC6532);//设置浏览器兼容模式
+            builder.addBinaryBody("media", file, ContentType.create("application/octet-stream", Consts.UTF_8), file.getName());
+            HttpEntity httpEntity  = builder.build();
+            response = HttpClientUtil.executeHttpPost(url,httpClient,httpEntity);
+            meidaId = JsonUtils.read(response,"media_id");
+            System.out.println("meidaId:"+meidaId);
         }catch (Exception e){
             logger.error("获取图片上传后的mediaID出错,请检查参数",e);
         }finally {
@@ -136,5 +143,38 @@ public class MsgPushService {
         }
         return response;
     }
+
+    /**
+     * @Author 阁楼麻雀
+     * @Date 2016-5-13 11:31
+     * @Desc 将文件转化为二进制流
+     */
+    /*public static byte[] getByte(File file) throws IOException {
+        byte[] bytes = null;
+        if(file != null){
+            FileInputStream fileInputeStream = new FileInputStream(file);
+            int length = (int) file.length();
+            if(length>Integer.MAX_VALUE){
+                logger.error("文件太大，读取失败！");
+                return null;
+            }
+            bytes = new byte[length];
+            int offset = 0;
+            int numRead = 0;
+            while(offset<bytes.length&&(numRead=fileInputeStream.read(bytes,offset,bytes.length-offset))>=0)
+            {
+                offset+=numRead;
+            }
+            //如果得到的字节长度和file实际的长度不一致就可能出错了
+            if(offset<bytes.length)
+            {
+                System.out.println("文件长度有误，读取失败！");
+                return null;
+            }
+            fileInputeStream.close();
+        }
+        return bytes;
+    }*/
+
 
 }
