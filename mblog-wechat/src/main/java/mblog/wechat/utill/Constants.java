@@ -36,9 +36,9 @@ public class Constants {
 	 */
 	public static String GET_USERLIST_URL = "https://api.weixin.qq.com/cgi-bin/user/get?access_token={0}";
 	/**
-	 * 图片上传接口
+	 * 图文消息上传接口
 	 */
-	public static String UP_LOADING_URL = "https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token={0}";
+	public static String UP_MPNEWS_URL = "https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token={0}";
 	/**
 	 * 上传临时素材接口
 	 */

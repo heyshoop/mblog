@@ -1,5 +1,6 @@
 package mblog.wechat.service;
 
+import mblog.wechat.entity.message.NewsMessage;
 import mblog.wechat.utill.Constants;
 import mblog.wechat.utill.HttpClientUtil;
 import mblog.wechat.utill.JsonUtils;
@@ -85,7 +86,7 @@ public class MsgPushService {
     /**
      * @Author 阁楼麻雀
      * @Date 2016-5-11 18:02
-     * @Desc 获取图片上传后的mediaID
+     * @Desc 获取素材上传后的mediaID
      */
     public static String getMediaId(String accessToken, File file,String type) throws IOException {
         String meidaId = null;
@@ -108,7 +109,6 @@ public class MsgPushService {
             HttpEntity httpEntity  = builder.build();
             response = HttpClientUtil.executeHttpPost(url,httpClient,httpEntity);
             meidaId = JsonUtils.read(response,"media_id");
-            System.out.println("meidaId:"+meidaId);
         }catch (Exception e){
             logger.error("获取图片上传后的mediaID出错,请检查参数",e);
         }finally {
@@ -143,7 +143,58 @@ public class MsgPushService {
         }
         return response;
     }
+    /**
+     * @Author 阁楼麻雀
+     * @Date 2016-5-13 15:33
+     * @Desc 获取图文消息mediaid
+     */
 
+    public static String getMpNewsMediaId(String accessToken,String seedUrl,NewsMessage newsMessage) throws IOException {
+        String mediaId = null;
+        CloseableHttpClient httpClient = null;
+        try {
+            String url = MessageFormat.format(seedUrl,accessToken);
+            httpClient = HttpClientUtil.getHttpClient();
+            String mpNewsMessage = JsonUtils.getMpnewsMessageId(newsMessage);
+            HttpEntity mpNewsMessageJson = new StringEntity(mpNewsMessage,"utf-8");
+            String response = HttpClientUtil.executeHttpPost(url,httpClient,mpNewsMessageJson);
+            mediaId = JsonUtils.read(response,"media_id");
+        }catch (Exception e){
+            logger.error("获取图文消息mediaid出错,请检查参数",e);
+        }finally {
+            httpClient.close();
+        }
+        return mediaId;
+    }
+
+    /**
+     * @Author 阁楼麻雀
+     * @Date 2016-5-13 15:46
+     * @Desc 发送图文消息
+     */
+    public static String seedMpNesMessage(String accessToken,String seedUrl,String mediaId) throws IOException {
+        String response = null;
+        CloseableHttpClient httpClient = null;
+        try {
+            String url = MessageFormat.format(seedUrl,accessToken);
+            httpClient = HttpClientUtil.getHttpClient();
+            String mpNewsMessage = JsonUtils.getMpNewsMessage(mediaId);
+            HttpEntity mpNewsMessageJson = new StringEntity(mpNewsMessage,"utf-8");
+            response = HttpClientUtil.executeHttpPost(url,httpClient,mpNewsMessageJson);
+            System.out.println(response);
+            String errcode = JsonUtils.read(response,"errcode");
+            if(errcode.equals("0")){
+                response = "推送成功！";
+            }else {
+                response = "推送失败，请检查日志";
+            }
+        }catch (Exception e){
+            logger.error("推送文本消息出错,请检查参数",e);
+        }finally {
+            httpClient.close();
+        }
+        return response;
+    }
     /**
      * @Author 阁楼麻雀
      * @Date 2016-5-13 11:31

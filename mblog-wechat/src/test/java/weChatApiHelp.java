@@ -15,19 +15,20 @@ public class weChatApiHelp {
     public void weChatGetTest(){
         String appid = Constants.APPID;
         String secret = Constants.SECRET;
-        String url = Constants.MSG_FZPUSH_URL;
+        String url = Constants.UP_MPNEWS_URL;
         String accessToken = null;
         String response = null;
         MsgPushService msgPushService = new MsgPushService();
         try {
             accessToken = msgPushService.getAccessToken(appid,secret);
-            File file = new File("D:\\data\\thumbs\\2016\\0509\\saber.jpg");
-            response = msgPushService.getMediaId(accessToken,file,"image");
-            //response = msgPushService.seedTextMessage(accessToken,url,"群发接口1");
+            //File file = new File("D:\\data\\thumbs\\2016\\0509\\吾王.jpg");
+            //response = msgPushService.getMpNewsMediaId(accessToken,url,"a");
+            //response = msgPushService.seedTextMessage(accessToken,Constants.MSG_FZPUSH_URL,"aaaaa");
+            response = msgPushService.seedMpNesMessage(accessToken,Constants.MSG_FZPUSH_URL,"a");
         }catch (Exception e){
             e.printStackTrace();
         }
-        //System.out.println("response:"+response);
+        System.out.println("response:"+response);
         //System.out.println("response:"+response);
     }
 }
