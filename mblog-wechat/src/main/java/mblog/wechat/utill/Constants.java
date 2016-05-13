@@ -28,6 +28,10 @@ public class Constants {
 	 */
 	public static String MSG_PUSH_URL = "https://api.weixin.qq.com/cgi-bin/message/send?access_token={0}";
 	/**
+	 * 推送分组信息接口
+	 */
+	public static String MSG_FZPUSH_URL = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token={0}";
+	/**
 	 * 获取用户列表接口
 	 */
 	public static String GET_USERLIST_URL = "https://api.weixin.qq.com/cgi-bin/user/get?access_token={0}";
@@ -35,6 +39,10 @@ public class Constants {
 	 * 图片上传接口
 	 */
 	public static String UP_LOADING_URL = "https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token={0}";
+	/**
+	 * 上传临时素材接口
+	 */
+	public static String UP_TEMPMEDIA_URL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token={0}&type={1}";
 	/**
 	 * ACCESS_TOKEN有效时间(单位：ms)
 	 */

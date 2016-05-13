@@ -2,6 +2,8 @@ import mblog.wechat.service.MsgPushService;
 import mblog.wechat.utill.Constants;
 import org.junit.Test;
 
+import java.io.File;
+
 /**
  * @Author 阁楼麻雀
  * @Date 2016-5-11
@@ -13,16 +15,19 @@ public class weChatApiHelp {
     public void weChatGetTest(){
         String appid = Constants.APPID;
         String secret = Constants.SECRET;
+        String url = Constants.MSG_FZPUSH_URL;
         String accessToken = null;
-        String userListJson = null;
+        String response = null;
         MsgPushService msgPushService = new MsgPushService();
         try {
             accessToken = msgPushService.getAccessToken(appid,secret);
-            userListJson = msgPushService.getUserListJson(accessToken);
+            File file = new File("D:/data/thumbs/2016/0509/saber.jpg");
+            response = msgPushService.getMediaId(accessToken,file,"image");
+            //response = msgPushService.seedTextMessage(accessToken,url,"群发接口1");
         }catch (Exception e){
             e.printStackTrace();
         }
         System.out.println("accessToken:"+accessToken);
-        System.out.println("userListJson:"+userListJson);
+        //System.out.println("response:"+response);
     }
 }

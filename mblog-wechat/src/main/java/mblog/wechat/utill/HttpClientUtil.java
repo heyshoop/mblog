@@ -1,8 +1,10 @@
 package mblog.wechat.utill;
 
+import mblog.wechat.entity.message.TextMessage;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -49,7 +51,6 @@ public class HttpClientUtil {
      * @Date 2016-5-10 16:30
      * @Desc 发起http get请求返回数据
      */
-
     public static String executeHttpGet(String url, CloseableHttpClient httpClient) throws IOException {
         HttpGet httpGet = new HttpGet(url);
         String response = null;
@@ -64,5 +65,26 @@ public class HttpClientUtil {
             httpResponse.close();
         }
         return response;
+    }
+    /**
+     * @Author 阁楼麻雀
+     * @Date 2016-5-11 21:25
+     * @Desc 发起http post请求返回数据
+     */
+    public static String executeHttpPost(String url,CloseableHttpClient httpClient,HttpEntity msgEntity) throws IOException {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setEntity(msgEntity);
+        String response = null;
+        CloseableHttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpPost);
+            HttpEntity entity = httpResponse.getEntity();
+            response = EntityUtils.toString(entity,"UTF-8");
+        }catch (Exception e){
+            logger.error("发起http post请求返回数据错误,我也不知道原因",e);
+        }finally {
+            httpResponse.close();
+        }
+        return  response;
     }
 }

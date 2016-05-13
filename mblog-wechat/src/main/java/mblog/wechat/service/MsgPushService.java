@@ -3,10 +3,17 @@ package mblog.wechat.service;
 import mblog.wechat.utill.Constants;
 import mblog.wechat.utill.HttpClientUtil;
 import mblog.wechat.utill.JsonUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import java.io.File;
 import java.text.MessageFormat;
 
 import java.io.IOException;
@@ -17,11 +24,9 @@ import java.io.IOException;
  * 微信消息推送服务
  */
 public class MsgPushService {
-    private String TokenUrl = Constants.GET_ACCESSTOKEN_URL;
-    private String UserInfoUrl = Constants.GET_USERINFO_URL;
-    private String MsgPushUrl = Constants.MSG_PUSH_URL;
-    private String UserListUrl = Constants.GET_USERLIST_URL;
-    private String UploadingUrl = Constants.UP_LOADING_URL;
+    private static String TokenUrl = Constants.GET_ACCESSTOKEN_URL;
+    private static String UserListUrl = Constants.GET_USERLIST_URL;
+    private static String UploadTempUrl = Constants.UP_TEMPMEDIA_URL;
     private static Logger logger = LoggerFactory.getLogger(MsgPushService.class);
 
 
@@ -31,7 +36,7 @@ public class MsgPushService {
      * @Desc 获取授权token
      */
 
-    public String getAccessToken(String appid,String secret) throws IOException {
+    public static String getAccessToken(String appid,String secret) throws IOException {
         String accessToken = null;
         CloseableHttpClient httpClient = null;
         try {
@@ -52,7 +57,7 @@ public class MsgPushService {
      * @Desc 获取关注用户列表数据
      */
 
-    public String getUserListJson(String accessToken) throws IOException {
+    public static String getUserListJson(String accessToken) throws IOException {
         String userListJson = null;
         CloseableHttpClient httpClient = null;
         try {
@@ -74,12 +79,62 @@ public class MsgPushService {
      * @Date 2016-5-11 18:02
      * @Desc 获取图片上传后的mediaID
      */
-    public String getMediaId(String accessToken){
+    public static String getMediaId(String accessToken, File file,String type) throws IOException {
         String meidaId = null;
-
-
-
+        if(file == null || accessToken == null || type == null){
+            return null;
+        }
+        if(!file.exists()){
+            logger.info("上传文件不存在,请检查!");
+            return null;
+        }
+        CloseableHttpClient httpClient = null;
+        CloseableHttpResponse httpResponse = null;
+        String response = null;
+        try {
+            String url = MessageFormat.format(UploadTempUrl,accessToken,type);
+            httpClient = HttpClientUtil.getHttpClient();
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();//builder替代过时的MultipartEntity
+            builder.addBinaryBody("media",file);
+            HttpPost httpPost = new HttpPost(url);
+            httpPost.setEntity(builder.build());
+            httpResponse = httpClient.execute(httpPost);
+            HttpEntity entity = httpResponse.getEntity();
+            response = EntityUtils.toString(entity,"UTF-8");
+            System.out.println(response);
+        }catch (Exception e){
+            logger.error("获取图片上传后的mediaID出错,请检查参数",e);
+        }finally {
+            httpClient.close();
+        }
         return meidaId;
+    }
+    /**
+     * @Author 阁楼麻雀
+     * @Date 2016-5-11 21:34
+     * @Desc 推送文本消息
+     */
+    public static String seedTextMessage(String accessToken,String seedUrl,String message) throws IOException {
+        String response = null;
+        CloseableHttpClient httpClient = null;
+        try {
+            String url = MessageFormat.format(seedUrl,accessToken);
+            httpClient = HttpClientUtil.getHttpClient();
+            String textMessage = JsonUtils.getTextMessage(message);
+            HttpEntity textMessageJson = new StringEntity(textMessage,"utf-8");
+            response = HttpClientUtil.executeHttpPost(url,httpClient,textMessageJson);
+            String errcode = JsonUtils.read(response,"errcode");
+            if(errcode.equals("0")){
+                response = "推送成功！";
+            }else {
+                response = "推送失败，请检查日志";
+            }
+        }catch (Exception e){
+            logger.error("推送文本消息出错,请检查参数",e);
+        }finally {
+            httpClient.close();
+        }
+        return response;
     }
 
 }
