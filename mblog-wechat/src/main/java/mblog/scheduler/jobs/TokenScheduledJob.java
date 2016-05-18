@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
 	 * @Author 阁楼麻雀
@@ -34,7 +36,9 @@ public class TokenScheduledJob extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext arg0)
 			throws JobExecutionException {
 		MsgPushService msgPushService = new MsgPushService();
-		System.out.println("开始获取accesstoken");
+		Date date = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println("开始获取accesstoken"+df.format(date));
 		System.out.println("appid----------------------"+this.constants.APPID);
 		System.out.println("SECRET---------------------"+this.constants.SECRET);
 		String accesstoken = "";

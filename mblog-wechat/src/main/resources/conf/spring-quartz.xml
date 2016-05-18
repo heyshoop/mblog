@@ -3,30 +3,45 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
                             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
- 
+    <!--包路径-->
     <context:component-scan base-package="mblog" />
 
-
-    <!-- For times when you need more complex processing, passing data to the scheduled job -->
+    <!-- 定时任务对应的类 -->
     <bean name="tokenComplexJobDetail"    class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="mblog.scheduler.jobs.TokenScheduledJob" />
         <property name="jobDataAsMap">
             <map>
+                <!--可为定时任务传递参数的实体类-->
                 <entry key="Constants" value-ref="Constants" />
             </map>
         </property>
+        <!--生命周期持续-->
         <property name="durability" value="true" />
     </bean>
- 
- 
-    <!-- Run the job every 10 seconds -->
+    <!-- 方法一：每半小时执行一次，设置方式更灵活，可在特定日期触发，但因tomcat启动时未执行舍弃 -->
     <bean id="cronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="tokenComplexJobDetail" />
-        <property name="cronExpression" value="0 0/2 * ? * *" />
+        <property name="cronExpression" value="0 0/30 * ? * *" />
     </bean>
- 
- 
-    <!-- Scheduler factory bean to glue together jobDetails and triggers to Configure Quartz Scheduler -->
+    <!--方法二：根据设置条件循环执行，可设置启动延迟-->
+    <bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="tokenComplexJobDetail"/>
+        </property>
+       <!-- 延迟多少时间执行-->
+        <property name="startDelay">
+            <value>10000</value>
+        </property>
+        <!--每隔多少时间执行-->
+        <property name="repeatInterval">
+            <value>10000</value>
+        </property>
+        <!--执行多少次
+        <property name="repeatCount">
+            <value>0</value>
+        </property>-->
+    </bean>
+    <!-- 配置好的定时任务 -->
     <bean  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="jobDetails">
             <list>
@@ -36,7 +51,7 @@
  
         <property name="triggers">
             <list>
-                <ref bean="cronTrigger" />
+                <ref bean="simpleTrigger" />
             </list>
         </property>
     </bean>

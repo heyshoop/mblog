@@ -9,6 +9,8 @@
 */
 package mblog.web.controller.admin;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import mblog.scheduler.entity.Token;
@@ -131,6 +133,9 @@ public class PostsController extends BaseController {
 				data = Data.failure(e.getMessage());
 			}
 		}
+		Date date = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println("推送时间：-----"+df.format(date));
 		System.out.println("accesstoken的内存地址为------------------------------------"+Token.getInstance());
 		System.out.println("内存中的accesstoken为--------------------------------------"+Token.getInstance().getToken());
 		return data;
