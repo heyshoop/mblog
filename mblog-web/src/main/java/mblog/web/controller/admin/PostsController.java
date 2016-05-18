@@ -11,6 +11,7 @@ package mblog.web.controller.admin;
 
 import java.util.List;
 
+import mblog.scheduler.entity.Token;
 import mtons.modules.lang.Const;
 import mtons.modules.pojos.Data;
 import mtons.modules.pojos.Paging;
@@ -31,11 +32,11 @@ import mblog.core.persist.service.PostService;
 import mblog.web.controller.BaseController;
 
 import javax.servlet.http.HttpServletRequest;
-
-/**
- * @author langhsu
- *
- */
+	/**
+	 * @Author 阁楼麻雀
+	 * @Date 2016-5-18 13:50
+	 * @Desc
+	 */
 @Controller("mng_post_ctl")
 @RequestMapping("/admin/posts")
 public class PostsController extends BaseController {
@@ -92,7 +93,7 @@ public class PostsController extends BaseController {
 		if (id != null) {
 			try {
 				postBiz.updateFeatured(id, featured);
-				data = Data.success("操作成功", Data.NOOP);
+				data = Data.success("设置成功", Data.NOOP);
 			} catch (Exception e) {
 				data = Data.failure(e.getMessage());
 			}
@@ -106,11 +107,32 @@ public class PostsController extends BaseController {
 		if (id != null) {
 			try {
 				postBiz.delete(id);
+				data = Data.success("删除成功", Data.NOOP);
+			} catch (Exception e) {
+				data = Data.failure(e.getMessage());
+			}
+		}
+		return data;
+	}
+	/**
+	 * @Author 阁楼麻雀
+	 * @Date 2016-5-18 11:51
+	 * @Desc 文章推送方法
+	 */
+
+	@RequestMapping("/seed")
+	public @ResponseBody Data seed(@RequestParam("id") List<Long> id) {
+		Data data = Data.failure("操作失败");
+		if (id != null) {
+			try {
+
 				data = Data.success("操作成功", Data.NOOP);
 			} catch (Exception e) {
 				data = Data.failure(e.getMessage());
 			}
 		}
+		System.out.println("accesstoken的内存地址为------------------------------------"+Token.getInstance());
+		System.out.println("内存中的accesstoken为--------------------------------------"+Token.getInstance().getToken());
 		return data;
 	}
 }

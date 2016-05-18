@@ -95,6 +95,7 @@
 			<artifactId>shiro-spring</artifactId>
 		</dependency>
 
+
 		<dependency>
 			<groupId>com.mtons.mblog</groupId>
 			<artifactId>mblog-api</artifactId>

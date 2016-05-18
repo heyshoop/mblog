@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+ 
+    <context:component-scan base-package="mblog" />
+
+
+    <!-- For times when you need more complex processing, passing data to the scheduled job -->
+    <bean name="tokenComplexJobDetail"    class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="mblog.scheduler.jobs.TokenScheduledJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="Constants" value-ref="Constants" />
+            </map>
+        </property>
+        <property name="durability" value="true" />
+    </bean>
+ 
+ 
+    <!-- Run the job every 10 seconds -->
+    <bean id="cronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="tokenComplexJobDetail" />
+        <property name="cronExpression" value="0 0/2 * ? * *" />
+    </bean>
+ 
+ 
+    <!-- Scheduler factory bean to glue together jobDetails and triggers to Configure Quartz Scheduler -->
+    <bean  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="tokenComplexJobDetail" />
+            </list>
+        </property>
+ 
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger" />
+            </list>
+        </property>
+    </bean>
+ 
+</beans>

@@ -1,11 +1,13 @@
 package mblog.wechat.utill;
 
-	/**
+import org.springframework.stereotype.Component;
+
+/**
 	 * @Author 阁楼麻雀
 	 * @Date 2016-5-11 15:34
 	 * @Desc 常量类
 	 */
-
+@Component("Constants")
 public class Constants {
 	/**
 	 * APPID
