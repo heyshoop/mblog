@@ -34,7 +34,7 @@
         </property>
         <!--每隔多少时间执行-->
         <property name="repeatInterval">
-            <value>10000</value>
+            <value>3600000</value>
         </property>
         <!--执行多少次
         <property name="repeatCount">

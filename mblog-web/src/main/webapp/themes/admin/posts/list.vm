@@ -59,7 +59,7 @@
     						<a href="$base/admin/posts/update?id=${row.id}" class="btn btn-mini btn-info">
     							<i class="fa fa-edit"></i>编辑
     						</a>
-                            <a href="$base/admin/posts/seed?id=${row.id}" class="btn btn-mini btn-primary">
+                            <a href="javascript:void(0);" class="btn btn-mini btn-primary" data-id="${row.id}" rel="push">
                                 <i class="fa fa-edit"></i>推送
                             </a>
 
@@ -118,6 +118,9 @@ function doDelete(ids) {
 function doUpdateFeatured(id, featured) {
     J.getJSON('$base/admin/posts/featured.json', J.param({'id': id, 'featured': featured}, true), ajaxReload);
 }
+function push(id) {
+    J.getJSON('$base/admin/posts/seed', J.param({'id': id}, true), ajaxReload);
+}
 
 $(function() {
 	// 删除
@@ -154,6 +157,18 @@ $(function() {
             shade: false //不显示遮罩
         }, function(){
             doUpdateFeatured(that.attr('data-id'), 0);
+        }, function(){
+        });
+        return false;
+    });
+    // 推送
+    $('#dataGrid a[rel="push"]').bind('click', function(){
+        var that = $(this);
+        layer.confirm('确定推送本文章吗?', {
+            btn: ['确定','取消'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            push(that.attr('data-id'));
         }, function(){
         });
         return false;

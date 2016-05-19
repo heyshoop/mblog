@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 import mblog.scheduler.entity.Token;
+import mblog.wechat.service.MsgPushService;
+import mblog.wechat.utill.Constants;
 import mtons.modules.lang.Const;
 import mtons.modules.pojos.Data;
 import mtons.modules.pojos.Paging;
@@ -123,21 +125,18 @@ public class PostsController extends BaseController {
 	 */
 
 	@RequestMapping("/seed")
-	public @ResponseBody Data seed(@RequestParam("id") List<Long> id) {
+	public @ResponseBody Data seed(@RequestParam("id") Long id) {
 		Data data = Data.failure("操作失败");
+		MsgPushService msgPushService = new MsgPushService();
 		if (id != null) {
 			try {
-
-				data = Data.success("操作成功", Data.NOOP);
+				Post ret = postService.get(id);
+				msgPushService.seedTextMessage(Token.getInstance().getToken(), Constants.MSG_FZPUSH_URL,ret.getTitle());
+				data = Data.success("推送成功", Data.NOOP);
 			} catch (Exception e) {
 				data = Data.failure(e.getMessage());
 			}
 		}
-		Date date = new Date();
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		System.out.println("推送时间：-----"+df.format(date));
-		System.out.println("accesstoken的内存地址为------------------------------------"+Token.getInstance());
-		System.out.println("内存中的accesstoken为--------------------------------------"+Token.getInstance().getToken());
 		return data;
 	}
 }
