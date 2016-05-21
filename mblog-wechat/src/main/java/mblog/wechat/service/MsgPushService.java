@@ -7,21 +7,15 @@ import mblog.wechat.utill.JsonUtils;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.nio.charset.Charset;
 import java.text.MessageFormat;
 
 import java.io.IOException;
@@ -195,37 +189,6 @@ public class MsgPushService {
         }
         return response;
     }
-    /**
-     * @Author 阁楼麻雀
-     * @Date 2016-5-13 11:31
-     * @Desc 将文件转化为二进制流
-     */
-    /*public static byte[] getByte(File file) throws IOException {
-        byte[] bytes = null;
-        if(file != null){
-            FileInputStream fileInputeStream = new FileInputStream(file);
-            int length = (int) file.length();
-            if(length>Integer.MAX_VALUE){
-                logger.error("文件太大，读取失败！");
-                return null;
-            }
-            bytes = new byte[length];
-            int offset = 0;
-            int numRead = 0;
-            while(offset<bytes.length&&(numRead=fileInputeStream.read(bytes,offset,bytes.length-offset))>=0)
-            {
-                offset+=numRead;
-            }
-            //如果得到的字节长度和file实际的长度不一致就可能出错了
-            if(offset<bytes.length)
-            {
-                System.out.println("文件长度有误，读取失败！");
-                return null;
-            }
-            fileInputeStream.close();
-        }
-        return bytes;
-    }*/
 
 
 }
