@@ -1,4 +1,5 @@
 #set($layout="default/layout/columns_signin.vm")
+#set($title = "登录")
 
 <div class="login">
     <!--
@@ -6,7 +7,7 @@
     -->
 
     <a href="${base}/index">
-        <img src="$base/assets/images/logo/m90.png" height="72" width="72">
+        <img src="$base/assets/images/logo/loginlogo.png" height="68" width="173">
     </a>
     <h1>$!{site_welcomes}</h1>
     <hr>
@@ -37,9 +38,9 @@
                 #*<a href="$base/reg">
                     注册
                 </a>*#
-                <a href="$base/forgot/apply">
+               #* <a href="$base/forgot/apply">
                     忘记密码
-                </a>
+                </a>*#
             </div>
         </div>
     </form>

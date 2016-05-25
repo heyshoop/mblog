@@ -48,7 +48,7 @@
     				<span class="icon-bar"></span>
     				<span class="icon-bar"></span>
     			</button>
-    			<a class="navbar-brand logo" href="$base/index"><img src="$base/assets/images/logo/m42.png"></a>
+    			<a class="navbar-brand logo" href="$base/index"><img src="$base/assets/images/logo/headlogo.png"></a>
     		</div>
     		<div id="navbar" class="navbar-collapse collapse">
     			<ul class="nav navbar-nav">
@@ -110,8 +110,8 @@
     		              </ul>
     				</li>
     				#else
-    				<li><a href="$base/login" class="signin">登录</a></li>
-                    <li><a href="$base/reg" class="signup">注册</a></li>
+    				#*<li><a href="$base/login" class="signin">登录</a></li>*#
+                    #*<li><a href="$base/reg" class="signup">注册</a></li>*#
     				#end
     			</ul>
     		</div>

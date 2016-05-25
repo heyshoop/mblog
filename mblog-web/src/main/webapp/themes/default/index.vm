@@ -1,4 +1,5 @@
-#set($title = $!{site_name})
+#*#set($title = $!{site_name})*#
+#set($title = "阿西吧")
 
 #contents(0, 'paging')
     <div class="shadow-box">
